@@ -1,0 +1,10 @@
+--- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
++++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
+@@ -14,6 +14,7 @@
+ #include <linux/ssb/ssb.h>
+ #include <linux/gpio_keys.h>
+ #include <linux/input.h>
++#include <linux/platform_data/b53.h>
+ #include <linux/export.h>
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi_gpio.h>
