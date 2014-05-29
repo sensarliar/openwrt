@@ -120,7 +120,7 @@ define Image/Build/CFEOLD
 endef
 
 define Image/Build/HCS
-	$(STAGING_DIR_HOST)/bin/hcsmakeimage --magic_byte=$(3) \
+	$(STAGING_DIR_HOST)/bin/hcsmakeimage --magic_bytes=$(3) \
 		--rev_maj=$(4) --rev_min=$(5) --input_file=$(6) \
 		--output_file=$(BIN_DIR)/openwrt-$(2)-$(1).bin
 endef
@@ -159,7 +159,10 @@ endef
 
 define Image/Build/Initramfs
 	# Netgear CVG834G
-	$(call Image/Build/HCS,initramfs,cvg834g,a020,0001,0022,$(KDIR)/vmlinux-initramfs)
+	$(call Image/Build/HCS,initramfs,cvg834g,0xa020,0001,0022,$(KDIR)/vmlinux-initramfs)
+
+	# Generic BCM93380
+	$(call Image/Build/HCS,initramfs,bcm93380,0xa0e7,0003,0000,$(KDIR)/vmlinux-initramfs)
 endef
 
 define Image/Build
@@ -295,7 +298,10 @@ define Image/Build
 	$(call Image/Build/SPW303V,$(1),96358-502V,6358,SPW303V)
 
 	# Netgear CVG834G
-	$(call Image/Build/HCS,$(1),cvg834g,a020,0001,0022,$(KDIR)/vmlinux)
+	$(call Image/Build/HCS,$(1),cvg834g,0xa020,0001,0022,$(KDIR)/vmlinux)
+
+	# Generic BCM93380
+	$(call Image/Build/HCS,$(1),bcm93380,0xa0e7,0003,0000,$(KDIR)/vmlinux)
 
   ifeq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
 	$(call Image/Build/Initramfs)
