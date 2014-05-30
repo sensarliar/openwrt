@@ -1,0 +1,16 @@
+--- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
++++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
+@@ -5053,9 +5053,12 @@ void __init board_prom_init(void)
+ 
+ 	bcm63xx_nvram_init(boot_addr + BCM963XX_NVRAM_OFFSET);
+ 
+-	if (BCMCPU_IS_3368() || BCMCPU_IS_3380()) {
++	if (BCMCPU_IS_3368()) {
+ 		hcs = (struct bcm_hcs *)boot_addr;
+ 		board_name = hcs->filename;
++	}
++	else if (BCMCPU_IS_3380()) {
++		board_name = "BCM93380";
+ 	} else {
+ 		if (strcmp(cfe_version, "unknown") != 0) {
+ 			/* cfe present */

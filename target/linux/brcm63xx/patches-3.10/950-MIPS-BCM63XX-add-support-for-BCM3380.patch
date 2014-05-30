@@ -5,7 +5,7 @@
  	if (BCMCPU_IS_6318() || BCMCPU_IS_6328() || BCMCPU_IS_6362() || BCMCPU_IS_63268()) {
  		val = 0x18000000;
 +	} else if (BCMCPU_IS_3380()) {
-+		val = 0x1fc00000;
++		val = 0;
  	} else {
  		val = bcm_mpi_readl(MPI_CSBASE_REG(0));
  		val &= MPI_CSBASE_BASE_MASK;
