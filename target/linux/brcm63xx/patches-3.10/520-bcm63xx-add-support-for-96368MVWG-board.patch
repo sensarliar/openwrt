@@ -10,7 +10,7 @@ Subject: [PATCH 32/63] bcm63xx: add support for 96368MVWG board.
 
 --- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
 +++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-@@ -2219,6 +2219,85 @@ static struct board_info __initdata boar
+@@ -2240,6 +2240,85 @@ static struct board_info __initdata boar
  #endif
  
  /*
@@ -96,7 +96,7 @@ Subject: [PATCH 32/63] bcm63xx: add support for 96368MVWG board.
   * all boards
   */
  static const struct board_info __initconst *bcm963xx_boards[] = {
-@@ -2273,6 +2352,10 @@ static const struct board_info __initcon
+@@ -2294,6 +2373,10 @@ static const struct board_info __initcon
  	&board_HW553,
  	&board_spw303v,
  #endif

@@ -1,6 +1,6 @@
 --- a/arch/mips/bcm63xx/boards/board_bcm963xx.c
 +++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c
-@@ -4418,6 +4418,75 @@ static struct board_info __initdata boar
+@@ -4511,6 +4511,75 @@ static struct board_info __initdata boar
  #endif
  
  /*
@@ -76,7 +76,7 @@
   * all boards
   */
  static const struct board_info __initconst *bcm963xx_boards[] = {
-@@ -4502,6 +4571,9 @@ static const struct board_info __initcon
+@@ -4595,6 +4664,9 @@ static const struct board_info __initcon
  	&board_96368mvwg,
  	&board_96368mvngr,
  #endif

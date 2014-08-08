@@ -95,7 +95,7 @@
  #endif
  
  /*
-@@ -4338,6 +4426,7 @@ static const struct board_info __initcon
+@@ -4431,6 +4519,7 @@ static const struct board_info __initcon
  #endif
  #ifdef CONFIG_BCM63XX_CPU_6318
  	&board_96318ref,

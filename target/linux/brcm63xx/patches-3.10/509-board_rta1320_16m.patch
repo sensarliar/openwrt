@@ -46,7 +46,7 @@
  #endif
  
  /*
-@@ -1862,6 +1901,7 @@ static const struct board_info __initcon
+@@ -1869,6 +1908,7 @@ static const struct board_info __initcon
  	&board_96338gw,
  	&board_96338w,
  	&board_96338w2_e7t,
