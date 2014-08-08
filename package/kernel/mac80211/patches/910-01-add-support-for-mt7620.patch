@@ -1,5 +1,5 @@
---- a/drivers/net/wireless/rt2x00/rt2800.h	2014-06-30 01:05:26.000000000 +0300
-+++ b/drivers/net/wireless/rt2x00/rt2800.h	2014-06-30 01:23:42.000000000 +0300
+--- a/drivers/net/wireless/rt2x00/rt2800.h
++++ b/drivers/net/wireless/rt2x00/rt2800.h
 @@ -79,6 +79,7 @@
  #define RF5372				0x5372
  #define RF5390				0x5390
@@ -62,8 +62,8 @@
  /* TX_PWR_CFG_7 */
  #define TX_PWR_CFG_7			0x13d4
  #define TX_PWR_CFG_7_OFDM54_CH0		FIELD32(0x0000000f)
---- a/drivers/net/wireless/rt2x00/rt2800lib.c	2014-06-30 01:05:26.000000000 +0300
-+++ b/drivers/net/wireless/rt2x00/rt2800lib.c	2014-06-30 17:31:35.000000000 +0300
+--- a/drivers/net/wireless/rt2x00/rt2800lib.c
++++ b/drivers/net/wireless/rt2x00/rt2800lib.c
 @@ -61,6 +61,8 @@
  	rt2800_regbusy_read((__dev), BBP_CSR_CFG, BBP_CSR_CFG_BUSY, (__reg))
  #define WAIT_FOR_RFCSR(__dev, __reg) \
