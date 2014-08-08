@@ -48,7 +48,7 @@
  
  MODULE_LICENSE("GPL");
  MODULE_AUTHOR("Netfilter Core Team <coreteam@netfilter.org>");
-@@ -37,6 +38,12 @@ ip6table_filter_hook(unsigned int hook, 
+@@ -37,6 +38,12 @@ ip6table_filter_hook(unsigned int hook,
  		     int (*okfn)(struct sk_buff *))
  {
  	const struct net *net = dev_net((in != NULL) ? in : out);
@@ -63,7 +63,7 @@
  }
 --- a/net/netfilter/nf_conntrack_standalone.c
 +++ b/net/netfilter/nf_conntrack_standalone.c
-@@ -477,6 +477,13 @@ static ctl_table nf_ct_sysctl_table[] = 
+@@ -477,6 +477,13 @@ static ctl_table nf_ct_sysctl_table[] =
  		.extra2		= &log_invalid_proto_max,
  	},
  	{
