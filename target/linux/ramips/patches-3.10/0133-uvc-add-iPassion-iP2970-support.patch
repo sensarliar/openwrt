@@ -66,7 +66,7 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
  
  #include <media/v4l2-common.h>
  
-@@ -1074,9 +1079,149 @@ static void uvc_video_decode_data(struct
+@@ -1079,9 +1084,149 @@ static void uvc_video_decode_data(struct
  	}
  }
  
@@ -216,7 +216,7 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
  	/* Mark the buffer as done if the EOF marker is set. */
  	if (data[1] & UVC_STREAM_EOF && buf->bytesused != 0) {
  		uvc_trace(UVC_TRACE_FRAME, "Frame complete (EOF found).\n");
-@@ -1477,6 +1622,8 @@ static int uvc_init_video_isoc(struct uv
+@@ -1482,6 +1627,8 @@ static int uvc_init_video_isoc(struct uv
  	if (npackets == 0)
  		return -ENOMEM;
  

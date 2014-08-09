@@ -1,7 +1,5 @@
-Index: linux-3.10.34/drivers/net/ethernet/ralink/mdio_rt2880.c
-===================================================================
---- linux-3.10.34.orig/drivers/net/ethernet/ralink/mdio_rt2880.c
-+++ linux-3.10.34/drivers/net/ethernet/ralink/mdio_rt2880.c
+--- a/drivers/net/ethernet/ralink/mdio_rt2880.c
++++ b/drivers/net/ethernet/ralink/mdio_rt2880.c
 @@ -136,7 +136,7 @@ int rt2880_mdio_read(struct mii_bus *bus
  	if (err)
  		return 0xffff;
