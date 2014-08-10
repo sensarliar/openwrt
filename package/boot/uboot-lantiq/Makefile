@@ -109,6 +109,19 @@ define uboot/arv7518pw_brn
   DEPS:=@TARGET_lantiq_xway_ARV7518PW
 endef
 
+define uboot/arv7519rw22_ram
+  TITLE:=U-Boot for Lantiq ARV7519RW22 (RAM)
+  SOC:=vr9
+  DDR_SETTINGS:=board/arcadyan/arv7519rw22/ddr_settings.h
+  DEPS:=@(TARGET_lantiq_xrx200_ARV7519RWV11||TARGET_lantiq_xrx200_ARV7519RWV12)
+endef
+
+define uboot/arv7519rw22_nor
+  TITLE:=U-Boot for Lantiq ARV7519RW22 (NOR)
+  SOC:=vr9
+  DEPS:=@(TARGET_lantiq_xrx200_ARV7519RWV11||TARGET_lantiq_xrx200_ARV7519RWV12)
+endef
+
 define uboot/arv752dpw_ram
   TITLE:=U-Boot for Arcadyan arv752dpw (RAM)
   SOC:=danube
@@ -260,6 +273,7 @@ UBOOTS:= \
 	arv7510pw_ram arv7510pw_nor arv7510pw_brn \
 	arv7510pw22_ram arv7510pw22_nor arv7510pw22_brn \
 	arv7518pw_ram arv7518pw_nor arv7518pw_brn \
+	arv7519rw22_ram arv7519rw22_nor \
 	arv752dpw_ram arv752dpw_nor arv752dpw_brn \
 	arv752dpw22_ram arv752dpw22_nor arv752dpw22_brn \
 	gigasx76x_ram gigasx76x_nor \
