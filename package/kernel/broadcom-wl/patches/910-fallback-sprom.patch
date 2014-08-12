@@ -1,6 +1,5 @@
-diff -uprN a/driver/bcmsrom.c b/driver/bcmsrom.c
---- a/driver/bcmsrom.c	2014-08-08 22:10:52.417653880 +0200
-+++ b/driver/bcmsrom.c	2014-08-08 23:37:13.143923972 +0200
+--- a/driver/bcmsrom.c
++++ b/driver/bcmsrom.c
 @@ -39,6 +39,11 @@
  #include <sbsdpcmdev.h>
  #endif 
@@ -13,7 +12,7 @@ diff -uprN a/driver/bcmsrom.c b/driver/bcmsrom.c
  #ifdef WLTEST
  #include <sbsprom.h>
  #endif /* WLTEST */
-@@ -2120,6 +2125,221 @@ BCMATTACHFN(initvars_srom_pci)(si_t *sih
+@@ -2120,6 +2125,63 @@ BCMATTACHFN(initvars_srom_pci)(si_t *sih
  			goto varscont;
  		}
  
@@ -26,196 +25,38 @@ diff -uprN a/driver/bcmsrom.c b/driver/bcmsrom.c
 +			struct ssb_sprom bcm63xx_sprom;
 +			uint pci_bus = osl_pci_bus(osh), pci_slot = osl_pci_slot(osh);
 +
-+			varbuf_init(&b, base, MAXSZ_NVRAM_VARS);
-+
 +			bcm63xx_get_fallback_sprom(pci_bus, pci_slot, &bcm63xx_sprom);
 +			printk("BCM%X(%02x:%02x) using sprom version %i\n", sih->chip, pci_bus, pci_slot, bcm63xx_sprom.revision);
 +
-+			switch (bcm63xx_sprom.revision) {
-+				case 8:
-+					varbuf_append(&b, vstr_tri2g, bcm63xx_sprom.tri2g);
-+					varbuf_append(&b, vstr_tri5g, bcm63xx_sprom.tri5g);
-+					varbuf_append(&b, vstr_tri5gl, bcm63xx_sprom.tri5gl);
-+					varbuf_append(&b, vstr_tri5gh, bcm63xx_sprom.tri5gh);
++			varbuf_init(&b, base, MAXSZ_NVRAM_VARS);
 +
-+					varbuf_append(&b, vstr_rxpo2g, bcm63xx_sprom.rxpo2g);
-+					varbuf_append(&b, vstr_rxpo5g, bcm63xx_sprom.rxpo5g);
++			varbuf_append(&b, vstr_sromrev, bcm63xx_sprom.revision);
++			varbuf_append(&b, vstr_boardrev, bcm63xx_sprom.board_rev);
 +
-+					varbuf_append(&b, vstr_rssismf2g, bcm63xx_sprom.rssismf2g);
-+					varbuf_append(&b, vstr_rssismc2g, bcm63xx_sprom.rssismc2g);
-+					varbuf_append(&b, vstr_rssisav2g, bcm63xx_sprom.rssisav2g);
++			/* ToDo: map bcm63xx_sprom.country_code */
++			varbuf_append(&b, vstr_noccode);
 +
-+					varbuf_append(&b, vstr_bxa2g, bcm63xx_sprom.bxa2g);
-+					varbuf_append(&b, vstr_bxa5g, bcm63xx_sprom.bxa5g);
++			varbuf_append(&b, vstr_aa2g, bcm63xx_sprom.ant_available_bg);
 +
-+					varbuf_append(&b, vstr_rssismf5g, bcm63xx_sprom.rssismf5g);
-+					varbuf_append(&b, vstr_rssismc5g, bcm63xx_sprom.rssismc5g);
-+					varbuf_append(&b, vstr_rssisav5g, bcm63xx_sprom.rssisav5g);
++			varbuf_append(&b, vstr_pa0b[0], bcm63xx_sprom.pa0b0);
++			varbuf_append(&b, vstr_pa1b[0], bcm63xx_sprom.pa1b0);
++			varbuf_append(&b, vstr_pa0b[1], bcm63xx_sprom.pa0b1);
++			varbuf_append(&b, vstr_pa1b[1], bcm63xx_sprom.pa1b1);
++			varbuf_append(&b, vstr_pa0b[2], bcm63xx_sprom.pa0b2);
++			varbuf_append(&b, vstr_pa1b[2], bcm63xx_sprom.pa1b2);
 +
-+					varbuf_append(&b, vstr_cck2gpo, bcm63xx_sprom.cck2gpo);
++			varbuf_append(&b, vstr_pa0maxpwr, bcm63xx_sprom.maxpwr_bg);
++			varbuf_append(&b, vstr_pa0itssit, bcm63xx_sprom.itssi_bg);
 +
-+					varbuf_append(&b, vstr_ofdm2gpo, bcm63xx_sprom.ofdm2gpo);
-+					varbuf_append(&b, vstr_ofdm5glpo, bcm63xx_sprom.ofdm5glpo);
-+					varbuf_append(&b, vstr_ofdm5gpo, bcm63xx_sprom.ofdm5gpo);
-+					varbuf_append(&b, vstr_ofdm5ghpo, bcm63xx_sprom.ofdm5ghpo);
++			varbuf_append(&b, vstr_boardflags, (bcm63xx_sprom.boardflags_hi << 16) | bcm63xx_sprom.boardflags_lo);
++			varbuf_append(&b, vstr_boardflags2, (bcm63xx_sprom.boardflags2_hi << 16) | bcm63xx_sprom.boardflags2_lo);
 +
-+					varbuf_append(&b, vstr_itt2ga0, bcm63xx_sprom.core_pwr_info[0].itssi_2g);
-+					varbuf_append(&b, vstr_itt2ga1, bcm63xx_sprom.core_pwr_info[1].itssi_2g);
-+					varbuf_append(&b, vstr_maxp2ga0, bcm63xx_sprom.core_pwr_info[0].maxpwr_2g);
-+					varbuf_append(&b, vstr_maxp2ga1, bcm63xx_sprom.core_pwr_info[1].maxpwr_2g);
++			snprintf(eabuf, sizeof(eabuf), "%02x:%02x:%02x:%02x:%02x:%02x",
++				bcm63xx_sprom.il0mac[0], bcm63xx_sprom.il0mac[1], bcm63xx_sprom.il0mac[2],
++				bcm63xx_sprom.il0mac[3], bcm63xx_sprom.il0mac[4], bcm63xx_sprom.il0mac[5]
++			);
 +
-+					varbuf_append(&b, vstr_pa, 2, 0, 0, bcm63xx_sprom.core_pwr_info[0].pa_2g[0]);
-+					varbuf_append(&b, vstr_pa, 2, 1, 0, bcm63xx_sprom.core_pwr_info[0].pa_2g[1]);
-+					varbuf_append(&b, vstr_pa, 2, 2, 0, bcm63xx_sprom.core_pwr_info[0].pa_2g[2]);
-+					varbuf_append(&b, vstr_pa, 2, 0, 1, bcm63xx_sprom.core_pwr_info[1].pa_2g[0]);
-+					varbuf_append(&b, vstr_pa, 2, 1, 1, bcm63xx_sprom.core_pwr_info[1].pa_2g[1]);
-+					varbuf_append(&b, vstr_pa, 2, 2, 1, bcm63xx_sprom.core_pwr_info[1].pa_2g[2]);
-+
-+					varbuf_append(&b, vstr_itt5ga0, bcm63xx_sprom.core_pwr_info[0].itssi_5g);
-+					varbuf_append(&b, vstr_itt5ga1, bcm63xx_sprom.core_pwr_info[1].itssi_5g);
-+					varbuf_append(&b, vstr_maxp5ga0, bcm63xx_sprom.core_pwr_info[0].maxpwr_5g);
-+					varbuf_append(&b, vstr_maxp5ga1, bcm63xx_sprom.core_pwr_info[1].maxpwr_5g);
-+					varbuf_append(&b, vstr_maxp5gha0, bcm63xx_sprom.core_pwr_info[0].maxpwr_5gh);
-+					varbuf_append(&b, vstr_maxp5gha1, bcm63xx_sprom.core_pwr_info[1].maxpwr_5gh);
-+					varbuf_append(&b, vstr_maxp5gla0, bcm63xx_sprom.core_pwr_info[0].maxpwr_5gl);
-+					varbuf_append(&b, vstr_maxp5gla1, bcm63xx_sprom.core_pwr_info[1].maxpwr_5gl);
-+
-+					varbuf_append(&b, vstr_pahl, 5, 'l', 0, 0, bcm63xx_sprom.core_pwr_info[0].pa_5gl[0]);
-+					varbuf_append(&b, vstr_pahl, 5, 'l', 1, 0, bcm63xx_sprom.core_pwr_info[0].pa_5gl[1]);
-+					varbuf_append(&b, vstr_pahl, 5, 'l', 2, 0, bcm63xx_sprom.core_pwr_info[0].pa_5gl[2]);
-+					varbuf_append(&b, vstr_pahl, 5, 'l', 0, 1, bcm63xx_sprom.core_pwr_info[1].pa_5gl[0]);
-+					varbuf_append(&b, vstr_pahl, 5, 'l', 1, 1, bcm63xx_sprom.core_pwr_info[1].pa_5gl[1]);
-+					varbuf_append(&b, vstr_pahl, 5, 'l', 2, 1, bcm63xx_sprom.core_pwr_info[1].pa_5gl[2]);
-+
-+					varbuf_append(&b, vstr_pa, 5, 0, 0, bcm63xx_sprom.core_pwr_info[0].pa_5g[0]);
-+					varbuf_append(&b, vstr_pa, 5, 1, 0, bcm63xx_sprom.core_pwr_info[0].pa_5g[1]);
-+					varbuf_append(&b, vstr_pa, 5, 2, 0, bcm63xx_sprom.core_pwr_info[0].pa_5g[2]);
-+					varbuf_append(&b, vstr_pa, 5, 0, 1, bcm63xx_sprom.core_pwr_info[1].pa_5g[0]);
-+					varbuf_append(&b, vstr_pa, 5, 1, 1, bcm63xx_sprom.core_pwr_info[1].pa_5g[1]);
-+					varbuf_append(&b, vstr_pa, 5, 2, 1, bcm63xx_sprom.core_pwr_info[1].pa_5g[2]);
-+
-+					varbuf_append(&b, vstr_pahl, 5, 'h', 0, 0, bcm63xx_sprom.core_pwr_info[0].pa_5gh[0]);
-+					varbuf_append(&b, vstr_pahl, 5, 'h', 1, 0, bcm63xx_sprom.core_pwr_info[0].pa_5gh[1]);
-+					varbuf_append(&b, vstr_pahl, 5, 'h', 2, 0, bcm63xx_sprom.core_pwr_info[0].pa_5gh[2]);
-+					varbuf_append(&b, vstr_pahl, 5, 'h', 0, 1, bcm63xx_sprom.core_pwr_info[1].pa_5gh[0]);
-+					varbuf_append(&b, vstr_pahl, 5, 'h', 1, 1, bcm63xx_sprom.core_pwr_info[1].pa_5gh[1]);
-+					varbuf_append(&b, vstr_pahl, 5, 'h', 2, 1, bcm63xx_sprom.core_pwr_info[1].pa_5gh[2]);
-+
-+					varbuf_append(&b, vstr_tssipos2g, bcm63xx_sprom.fem.ghz2.tssipos);
-+					varbuf_append(&b, vstr_extpagain2g, bcm63xx_sprom.fem.ghz2.extpa_gain);
-+					varbuf_append(&b, vstr_pdetrange2g, bcm63xx_sprom.fem.ghz2.pdet_range);
-+					varbuf_append(&b, vstr_triso2g, bcm63xx_sprom.fem.ghz2.tr_iso);
-+					varbuf_append(&b, vstr_antswctl2g, bcm63xx_sprom.fem.ghz2.antswlut);
-+
-+					varbuf_append(&b, vstr_tssipos5g, bcm63xx_sprom.fem.ghz5.tssipos);
-+					varbuf_append(&b, vstr_extpagain5g, bcm63xx_sprom.fem.ghz5.extpa_gain);
-+					varbuf_append(&b, vstr_pdetrange5g, bcm63xx_sprom.fem.ghz5.pdet_range);
-+					varbuf_append(&b, vstr_triso5g, bcm63xx_sprom.fem.ghz5.tr_iso);
-+					varbuf_append(&b, vstr_antswctl5g, bcm63xx_sprom.fem.ghz5.antswlut);
-+
-+					varbuf_append(&b, vstr_leddc, (bcm63xx_sprom.leddc_on_time << 8) | bcm63xx_sprom.leddc_off_time);
-+
-+					varbuf_append(&b, vstr_txchain, bcm63xx_sprom.txchain);
-+					varbuf_append(&b, vstr_rxchain, bcm63xx_sprom.rxchain);
-+					varbuf_append(&b, vstr_antswitch, bcm63xx_sprom.antswitch);
-+
-+					varbuf_append(&b, vstr_mcspo, 2, 0, bcm63xx_sprom.mcs2gpo[0]);
-+					varbuf_append(&b, vstr_mcspo, 2, 1, bcm63xx_sprom.mcs2gpo[1]);
-+					varbuf_append(&b, vstr_mcspo, 2, 2, bcm63xx_sprom.mcs2gpo[2]);
-+					varbuf_append(&b, vstr_mcspo, 2, 3, bcm63xx_sprom.mcs2gpo[3]);
-+					varbuf_append(&b, vstr_mcspo, 2, 4, bcm63xx_sprom.mcs2gpo[4]);
-+					varbuf_append(&b, vstr_mcspo, 2, 5, bcm63xx_sprom.mcs2gpo[5]);
-+					varbuf_append(&b, vstr_mcspo, 2, 6, bcm63xx_sprom.mcs2gpo[6]);
-+					varbuf_append(&b, vstr_mcspo, 2, 7, bcm63xx_sprom.mcs2gpo[7]);
-+
-+					varbuf_append(&b, vstr_mcspo, 5, 0, bcm63xx_sprom.mcs5gpo[0]);
-+					varbuf_append(&b, vstr_mcspo, 5, 1, bcm63xx_sprom.mcs5gpo[1]);
-+					varbuf_append(&b, vstr_mcspo, 5, 2, bcm63xx_sprom.mcs5gpo[2]);
-+					varbuf_append(&b, vstr_mcspo, 5, 3, bcm63xx_sprom.mcs5gpo[3]);
-+					varbuf_append(&b, vstr_mcspo, 5, 4, bcm63xx_sprom.mcs5gpo[4]);
-+					varbuf_append(&b, vstr_mcspo, 5, 5, bcm63xx_sprom.mcs5gpo[5]);
-+					varbuf_append(&b, vstr_mcspo, 5, 6, bcm63xx_sprom.mcs5gpo[6]);
-+					varbuf_append(&b, vstr_mcspo, 5, 7, bcm63xx_sprom.mcs5gpo[7]);
-+
-+					varbuf_append(&b, vstr_mcspohl, 5, 'l', 0, bcm63xx_sprom.mcs5glpo[0]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'l', 1, bcm63xx_sprom.mcs5glpo[1]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'l', 2, bcm63xx_sprom.mcs5glpo[2]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'l', 3, bcm63xx_sprom.mcs5glpo[3]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'l', 4, bcm63xx_sprom.mcs5glpo[4]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'l', 5, bcm63xx_sprom.mcs5glpo[5]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'l', 6, bcm63xx_sprom.mcs5glpo[6]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'l', 7, bcm63xx_sprom.mcs5glpo[7]);
-+
-+					varbuf_append(&b, vstr_mcspohl, 5, 'h', 0, bcm63xx_sprom.mcs5ghpo[0]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'h', 1, bcm63xx_sprom.mcs5ghpo[1]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'h', 2, bcm63xx_sprom.mcs5ghpo[2]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'h', 3, bcm63xx_sprom.mcs5ghpo[3]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'h', 4, bcm63xx_sprom.mcs5ghpo[4]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'h', 5, bcm63xx_sprom.mcs5ghpo[5]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'h', 6, bcm63xx_sprom.mcs5ghpo[6]);
-+					varbuf_append(&b, vstr_mcspohl, 5, 'h', 7, bcm63xx_sprom.mcs5ghpo[7]);
-+
-+				case 4:
-+				case 5:
-+					varbuf_append(&b, vstr_boardflags2, (bcm63xx_sprom.boardflags2_hi << 16) | bcm63xx_sprom.boardflags2_lo);
-+
-+					varbuf_append(&b, vstr_ag, 2, bcm63xx_sprom.antenna_gain.a2);
-+					varbuf_append(&b, vstr_ag, 3, bcm63xx_sprom.antenna_gain.a3);
-+
-+				case 2:
-+				case 3:
-+					varbuf_append(&b, vstr_opo, bcm63xx_sprom.opo);
-+
-+					varbuf_append(&b, vstr_pa1lob[0], bcm63xx_sprom.pa1lob0);
-+					varbuf_append(&b, vstr_pa1lob[1], bcm63xx_sprom.pa1lob1);
-+					varbuf_append(&b, vstr_pa1lob[2], bcm63xx_sprom.pa1lob2);
-+					varbuf_append(&b, vstr_pa1hib[0], bcm63xx_sprom.pa1hib0);
-+					varbuf_append(&b, vstr_pa1hib[1], bcm63xx_sprom.pa1hib1);
-+					varbuf_append(&b, vstr_pa1hib[2], bcm63xx_sprom.pa1hib2);
-+
-+					varbuf_append(&b, vstr_pa1lomaxpwr, bcm63xx_sprom.maxpwr_al);
-+					varbuf_append(&b, vstr_pa1himaxpwr, bcm63xx_sprom.maxpwr_ah);
-+
-+				case 1:
-+					varbuf_append(&b, vstr_sromrev, bcm63xx_sprom.revision);
-+					varbuf_append(&b, vstr_boardrev, bcm63xx_sprom.board_rev);
-+					varbuf_append(&b, vstr_boardtype, bcm63xx_sprom.board_type);
-+
-+					varbuf_append(&b, vstr_noccode);
-+
-+					varbuf_append(&b, vstr_aa2g, bcm63xx_sprom.ant_available_bg);
-+					varbuf_append(&b, vstr_aa5g, bcm63xx_sprom.ant_available_a);
-+
-+					varbuf_append(&b, vstr_pa0b[0], bcm63xx_sprom.pa0b0);
-+					varbuf_append(&b, vstr_pa0b[1], bcm63xx_sprom.pa0b1);
-+					varbuf_append(&b, vstr_pa0b[2], bcm63xx_sprom.pa0b2);
-+					varbuf_append(&b, vstr_pa1b[0], bcm63xx_sprom.pa1b0);
-+					varbuf_append(&b, vstr_pa1b[1], bcm63xx_sprom.pa1b1);
-+					varbuf_append(&b, vstr_pa1b[2], bcm63xx_sprom.pa1b2);
-+
-+					varbuf_append(&b, vstr_pa0maxpwr, bcm63xx_sprom.maxpwr_bg);
-+					varbuf_append(&b, vstr_pa1maxpwr, bcm63xx_sprom.maxpwr_a);
-+
-+					varbuf_append(&b, vstr_pa1itssit, bcm63xx_sprom.itssi_a);
-+					varbuf_append(&b, vstr_pa0itssit, bcm63xx_sprom.itssi_bg);
-+
-+					varbuf_append(&b, vstr_boardflags, (bcm63xx_sprom.boardflags_hi << 16) | bcm63xx_sprom.boardflags_lo);
-+
-+					varbuf_append(&b, vstr_ag, 0, bcm63xx_sprom.antenna_gain.a0);
-+					varbuf_append(&b, vstr_ag, 1, bcm63xx_sprom.antenna_gain.a1);
-+
-+					snprintf(eabuf, sizeof(eabuf), "%02x:%02x:%02x:%02x:%02x:%02x",
-+						bcm63xx_sprom.il0mac[0], bcm63xx_sprom.il0mac[1], bcm63xx_sprom.il0mac[2],
-+						bcm63xx_sprom.il0mac[3], bcm63xx_sprom.il0mac[4], bcm63xx_sprom.il0mac[5]
-+					);
-+					varbuf_append(&b, vstr_macaddr, eabuf);
-+
-+					break;
-+
-+				default:
-+					printk("unsupported sprom version %i\n", bcm63xx_sprom.revision);
-+					break;
-+			}
++			varbuf_append(&b, vstr_macaddr, eabuf);
 +
 +			/* final nullbyte terminator */
 +			ASSERT(b.size >= 1);
