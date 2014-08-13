@@ -209,7 +209,8 @@ enable_broadcom() {
 	}
 
 	local leddc=$(wlc ifname "$device" leddc)
-	[ "$leddc" -eq 0xffff ] || {
+	local leddc_off=$(printf 0xffff\n)
+	[ "$leddc" == "$leddc_off" ] || {
 		leddc=0x005a000a;
 	}
 
