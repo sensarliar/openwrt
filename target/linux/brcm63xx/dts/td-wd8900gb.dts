@@ -1,0 +1,8 @@
+/dts-v1/;
+
+/include/ "bcm6348.dtsi"
+
+/ {
+	model = "TP-Link TD-W8900GB";
+	compatible = "tp-link,td-w8900gb", "brcm,bcm6348";
+};
