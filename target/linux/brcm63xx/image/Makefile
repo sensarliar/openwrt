@@ -280,6 +280,8 @@ $(eval $(call ImageDTB,CFEDTB,CT536_CT5621,ct536plus,96348GW-11,6348,CT536_CT562
 $(eval $(call ImageDTB,CFEDTB,CT5365,ct-5365,96348A-122,6348,CT-5365))
 # Comtrend CT-6373
 $(eval $(call ImageDTB,CFEDTB,CT6373,ct-6373,CT6373-1,6358,CT-6373))
+# Comtrend VG-8050
+$(eval $(call ImageDTB,CFEDTB,VG8050,vg-8050,963169P-1861N5,63268,VG-8050))
 # Comtrend VR-3025u
 $(eval $(call ImageDTB,CFEDTB,VR3025u,vr-3025u,96368M-1541N,6368,VR-3025u,--pad 16 --image-offset 0x20000 --block-size 0x20000))
 # Comtrend VR-3025un

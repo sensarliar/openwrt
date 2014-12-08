@@ -1,0 +1,56 @@
+diff -uprN a/arch/mips/bcm63xx/boards/board_bcm963xx.c b/arch/mips/bcm63xx/boards/board_bcm963xx.c
+--- a/arch/mips/bcm63xx/boards/board_bcm963xx.c	2014-12-06 23:50:36.903311282 +0100
++++ b/arch/mips/bcm63xx/boards/board_bcm963xx.c	2014-12-08 19:06:23.046832466 +0100
+@@ -5135,6 +5135,36 @@ static struct board_info __initdata boar
+ 		},
+ 	},
+ };
++
++static struct board_info __initdata board_VG8050 = {
++	.name				= "963169P-1861N5",
++	.expected_cpu_id	= 0x63268,
++
++	.has_uart0			= 1,
++
++	.has_ehci0			= 1,
++	.has_ohci0			= 1,
++	.num_usbh_ports		= 2,
++
++	.buttons = {
++		{
++			.desc		= "reset",
++			.gpio		= 32,
++			.active_low	= 1,
++			.type		= EV_KEY,
++			.code		= KEY_RESTART,
++			.debounce_interval = BCM963XX_KEYS_DEBOUNCE_INTERVAL,
++		},
++		{
++			.desc		= "wps",
++			.gpio		= 33,
++			.active_low	= 1,
++			.type		= EV_KEY,
++			.code		= KEY_WPS_BUTTON,
++			.debounce_interval = BCM963XX_KEYS_DEBOUNCE_INTERVAL,
++		},
++	},
++};
+ #endif /* CONFIG_BCM63XX_CPU_63268 */
+ 
+ /*
+@@ -5230,6 +5260,7 @@ static const struct board_info __initcon
+ 	&board_963268bu_p300,
+ 	&board_963269bhr,
+ 	&board_vw6339gu,
++	&board_VG8050,
+ #endif
+ };
+ 
+@@ -5307,6 +5338,7 @@ static struct of_device_id const bcm963x
+ #endif
+ #ifdef CONFIG_BCM63XX_CPU_63268
+ 	{ .compatible = "brcm,bcm963268bu_p300", .data = &board_963268bu_p300, },
++	{ .compatible = "comtrend,vg-8050", .data = &board_VG8050, },
+ #endif
+ #endif /* CONFIG_OF */
+ 	{ },
